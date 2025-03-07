@@ -14,7 +14,7 @@ export default function MessageList({ messages, renderContent }: MessageListProp
   }
 
   return (
-    <div className="space-y-4 pt-4">
+    <div className="space-y-4 pt-4 max-w-3xl mx-auto">
       {messages.map((message, index) => {
         const isUser = message.role === "user"
         const isConsecutive = index > 0 && messages[index - 1].role === message.role
@@ -25,7 +25,7 @@ export default function MessageList({ messages, renderContent }: MessageListProp
             className={cn(
               "flex gap-3 w-full",
               isUser ? "justify-end" : "justify-start",
-              isConsecutive ? "mt-1" : "mt-4",
+              isConsecutive ? "mt-1" : "mt-6",
             )}
           >
             {!isUser && !isConsecutive && (
@@ -41,7 +41,9 @@ export default function MessageList({ messages, renderContent }: MessageListProp
             <div
               className={cn(
                 "rounded-lg px-4 py-2 max-w-[85%] text-sm",
-                isUser ? "bg-primary text-primary-foreground rounded-tr-none" : "bg-muted rounded-tl-none",
+                isUser 
+                  ? "bg-primary bg-opacity-90 text-gray-500 dark:text-gray-300 rounded-tr-none" 
+                  : "bg-muted bg-opacity-80 backdrop-blur-sm rounded-tl-none",
               )}
             >
               {renderContent ? renderContent(message.content) : message.content}

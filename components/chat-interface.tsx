@@ -6,12 +6,11 @@ import { useState, useRef, useEffect } from "react"
 import { useChat } from "@ai-sdk/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card } from "@/components/ui/card"
-import { Send, Loader2, RefreshCw, XCircle } from "lucide-react"
+import { Send, Loader2, RefreshCw, XCircle, Paperclip, Mic } from "lucide-react"
 import MessageList from "./message-list"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import ReactMarkdown from 'react-markdown'
+import { ThemeToggle } from "./theme-toggle"
 
 export default function ChatInterface() {
   const { messages, input, handleInputChange, handleSubmit, isLoading, error, stop } = useChat({
@@ -24,12 +23,11 @@ export default function ChatInterface() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const scrollAreaRef = useRef<HTMLDivElement>(null)
   const [showWelcome, setShowWelcome] = useState(true)
 
   // Scroll to bottom when messages change
   useEffect(() => {
-    if (messagesEndRef.current) {
+    if (messagesEndRef.current && messages.length > 0) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
     }
   }, [messages])
@@ -69,93 +67,150 @@ export default function ChatInterface() {
     )
   }
 
-  return (
-    <Card className="flex flex-col h-[85vh] md:h-[85vh] lg:h-[90vh] w-full max-w-[95vw] mx-auto overflow-hidden border shadow-lg">
-      <div className="flex items-center justify-between p-4 border-b">
-        <h2 className="text-xl font-semibold">Chat with Imam</h2>
-        {messages.length > 0 && (
-          <Button variant="ghost" size="sm" onClick={() => window.location.reload()} title="Start a new conversation">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            New Chat
-          </Button>
-        )}
-      </div>
+  // Suggestion questions
+  const suggestions = [
+    "What is the importance of prayer in Islam?",
+    "How can I improve my relationship with Allah?",
+    "What does Islam say about mental health?",
+    "How to balance worldly life and religious duties?",
+  ]
 
-      <div className="flex-1 overflow-hidden relative">
-        <ScrollArea className="h-full p-4" ref={scrollAreaRef}>
-          {showWelcome && messages.length === 0 && (
-            <div className="flex flex-col items-center justify-center h-full text-center p-8">
-              <h3 className="text-lg font-medium">Welcome to Hidayah</h3>
-              <p className="text-sm text-muted-foreground mt-2 max-w-md">
-                Ask any questions about Islamic education and guidance. I&apos;m here to help clarify your doubts regarding
-                Deen and Duniya.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-6 w-full max-w-md">
-                {[
-                  "What is the importance of prayer in Islam?",
-                  "How can I improve my relationship with Allah?",
-                  "What does Islam say about mental health?",
-                  "How to balance worldly life and religious duties?",
-                ].map((suggestion) => (
+  return (
+    <div className="flex flex-col min-h-screen w-full">
+      {/* Navigation Bar */}
+      <nav className="sticky top-0 z-20 w-full border-b bg-background/80 backdrop-blur-sm">
+        <div className="container flex h-16 items-center justify-between px-4 max-w-4xl mx-auto">
+          <div className="flex items-center gap-2">
+            <div className="flex flex-col">
+              <h1 className="text-xl font-bold">Hidayah</h1>
+              <p className="text-xs text-muted-foreground">Islamic Guidance AI</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            {messages.length > 0 && (
+              <Button variant="ghost" size="sm" onClick={() => window.location.reload()} title="Start a new conversation">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                New Chat
+              </Button>
+            )}
+            <ThemeToggle />
+          </div>
+        </div>
+      </nav>
+
+      {/* Main chat area - Auto height with natural scrolling */}
+      <div className={`flex-1 px-4 ${messages.length > 0 ? 'overflow-y-auto' : 'overflow-hidden'} pb-32 max-w-4xl mx-auto w-full`}>
+        {showWelcome && messages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center min-h-[70vh] text-center">
+            <h3 className="text-lg font-medium">Welcome to Hidayah</h3>
+            <p className="text-sm text-muted-foreground mt-2 max-w-md px-2">
+              Ask any questions about Islamic education and guidance. I&apos;m here to help clarify your doubts regarding
+              Deen and Duniya.
+            </p>
+            
+            {/* Responsive suggestion grid */}
+            <div className="w-full max-w-md px-2 mt-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {suggestions.map((suggestion) => (
                   <Button
                     key={suggestion}
                     variant="outline"
-                    className="text-sm justify-start h-auto py-2 px-3"
+                    className="text-sm justify-start h-auto py-2 px-3 text-left break-words whitespace-normal"
                     onClick={() => {
                       handleInputChange({ target: { value: suggestion } } as React.ChangeEvent<HTMLInputElement>)
                       inputRef.current?.focus()
                     }}
                   >
-                    {suggestion}
+                    <span className="line-clamp-2">{suggestion}</span>
                   </Button>
                 ))}
               </div>
             </div>
-          )}
+          </div>
+        ) : (
+          <div className="py-4">
+            <MessageList 
+              messages={messages} 
+              renderContent={(content) => <MarkdownMessage content={content} />} 
+            />
 
-          <MessageList 
-            messages={messages} 
-            renderContent={(content) => <MarkdownMessage content={content} />} 
-          />
+            {error && (
+              <Alert variant="destructive" className="mt-4 bg-opacity-80 backdrop-blur-sm">
+                <AlertDescription className="flex items-center">
+                  <XCircle className="h-4 w-4 mr-2" />
+                  An error occurred. Please try again or refresh the page.
+                </AlertDescription>
+              </Alert>
+            )}
 
-          {error && (
-            <Alert variant="destructive" className="mt-4">
-              <AlertDescription className="flex items-center">
-                <XCircle className="h-4 w-4 mr-2" />
-                An error occurred. Please try again or refresh the page.
-              </AlertDescription>
-            </Alert>
-          )}
+            {isLoading && (
+              <div className="flex items-center justify-center py-4">
+                <Button variant="outline" size="sm" onClick={() => stop()} className="flex items-center bg-opacity-80 backdrop-blur-sm">
+                  <XCircle className="h-4 w-4 mr-2" />
+                  Stop generating
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+        
+        <div ref={messagesEndRef} />
+      </div>
 
-          {isLoading && (
-            <div className="flex items-center justify-center py-4">
-              <Button variant="outline" size="sm" onClick={() => stop()} className="flex items-center">
-                <XCircle className="h-4 w-4 mr-2" />
-                Stop generating
+      {/* Input area - Fixed at the bottom with Grok-like design */}
+      <div className="fixed bottom-0 left-0 right-0 py-4 px-4 bg-background/80 backdrop-blur-sm z-10">
+        <div className="max-w-3xl mx-auto">
+          <form onSubmit={handleFormSubmit} className="relative">
+            <div className="flex items-center relative bg-muted/30 border border-muted rounded-full overflow-hidden">
+              {/* Optional attachment button */}
+              <Button 
+                type="button" 
+                variant="ghost" 
+                size="icon" 
+                className="absolute left-2 h-8 w-8 rounded-full text-muted-foreground hover:text-foreground"
+              >
+                <Paperclip className="h-4 w-4" />
+              </Button>
+              
+              <Input
+                ref={inputRef}
+                value={input}
+                onChange={handleInputChange}
+                placeholder="How can Hidayah help?"
+                className="flex-1 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 pl-12 pr-12 py-3"
+                disabled={isLoading}
+              />
+              
+              {/* Optional mic button */}
+              <Button 
+                type="button" 
+                variant="ghost" 
+                size="icon" 
+                className="absolute right-12 h-8 w-8 rounded-full text-muted-foreground hover:text-foreground"
+              >
+                <Mic className="h-4 w-4" />
+              </Button>
+              
+              {/* Send button */}
+              <Button 
+                type="submit" 
+                disabled={isLoading || !input.trim()} 
+                className="absolute right-2 h-8 w-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center"
+                size="icon"
+              >
+                {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
               </Button>
             </div>
-          )}
-
-          <div ref={messagesEndRef} />
-        </ScrollArea>
+          </form>
+          
+          {/* Disclaimer text */}
+          <p className="text-xs text-muted-foreground text-center mt-2">
+            Hidayah provides AI-generated Islamic guidance. Always consult with qualified scholars for important religious matters.
+          </p>
+        </div>
       </div>
-
-      <div className="p-4 border-t mt-auto">
-        <form onSubmit={handleFormSubmit} className="flex space-x-2">
-          <Input
-            ref={inputRef}
-            value={input}
-            onChange={handleInputChange}
-            placeholder="Ask a question about Islamic guidance..."
-            className="flex-1"
-            disabled={isLoading}
-          />
-          <Button type="submit" disabled={isLoading || !input.trim()} className="transition-all duration-200">
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-          </Button>
-        </form>
-      </div>
-    </Card>
+    </div>
   )
 }
 
