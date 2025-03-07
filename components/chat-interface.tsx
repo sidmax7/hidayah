@@ -37,6 +37,16 @@ export default function ChatInterface() {
     inputRef.current?.focus()
   }, [])
 
+  // Keep focus on input field after messages change
+  useEffect(() => {
+    // Short delay to ensure focus happens after any other operations
+    const focusTimer = setTimeout(() => {
+      inputRef.current?.focus()
+    }, 100)
+    
+    return () => clearTimeout(focusTimer)
+  }, [messages])
+
   // Hide welcome message when user starts typing
   useEffect(() => {
     if (input.trim().length > 0) {
@@ -56,6 +66,11 @@ export default function ChatInterface() {
     if (input.trim()) {
       setShowWelcome(false)
       handleSubmit(e)
+      
+      // Immediately refocus the input field
+      setTimeout(() => {
+        inputRef.current?.focus()
+      }, 0)
     }
   }
 
@@ -89,7 +104,15 @@ export default function ChatInterface() {
           
           <div className="flex items-center gap-2">
             {messages.length > 0 && (
-              <Button variant="ghost" size="sm" onClick={() => window.location.reload()} title="Start a new conversation">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => {
+                  window.location.reload()
+                  // Focus will happen automatically on page reload
+                }} 
+                title="Start a new conversation"
+              >
                 <RefreshCw className="h-4 w-4 mr-2" />
                 New Chat
               </Button>
@@ -100,7 +123,10 @@ export default function ChatInterface() {
       </nav>
 
       {/* Main chat area - Auto height with natural scrolling */}
-      <div className={`flex-1 px-4 ${messages.length > 0 ? 'overflow-y-auto' : 'overflow-hidden'} pb-32 max-w-4xl mx-auto w-full`}>
+      <div 
+        className={`flex-1 px-4 ${messages.length > 0 ? 'overflow-y-auto' : 'overflow-hidden'} pb-32 max-w-4xl mx-auto w-full`}
+        onClick={() => inputRef.current?.focus()} // Focus input when clicking anywhere in the chat area
+      >
         {showWelcome && messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[70vh] text-center">
             <h3 className="text-lg font-medium">Welcome to Hidayah</h3>
@@ -146,7 +172,16 @@ export default function ChatInterface() {
 
             {isLoading && (
               <div className="flex items-center justify-center py-4">
-                <Button variant="outline" size="sm" onClick={() => stop()} className="flex items-center bg-opacity-80 backdrop-blur-sm">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => {
+                    stop()
+                    // Refocus input after stopping generation
+                    setTimeout(() => inputRef.current?.focus(), 0)
+                  }} 
+                  className="flex items-center bg-opacity-80 backdrop-blur-sm"
+                >
                   <XCircle className="h-4 w-4 mr-2" />
                   Stop generating
                 </Button>
@@ -169,6 +204,7 @@ export default function ChatInterface() {
                 variant="ghost" 
                 size="icon" 
                 className="absolute left-2 h-8 w-8 rounded-full text-muted-foreground hover:text-foreground"
+                onClick={() => inputRef.current?.focus()} // Refocus input after clicking
               >
                 <Paperclip className="h-4 w-4" />
               </Button>
@@ -180,6 +216,7 @@ export default function ChatInterface() {
                 placeholder="How can Hidayah help?"
                 className="flex-1 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 pl-12 pr-12 py-3"
                 disabled={isLoading}
+                autoFocus // Add autoFocus attribute
               />
               
               {/* Optional mic button */}
@@ -188,6 +225,7 @@ export default function ChatInterface() {
                 variant="ghost" 
                 size="icon" 
                 className="absolute right-12 h-8 w-8 rounded-full text-muted-foreground hover:text-foreground"
+                onClick={() => inputRef.current?.focus()} // Refocus input after clicking
               >
                 <Mic className="h-4 w-4" />
               </Button>
