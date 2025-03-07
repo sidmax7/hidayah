@@ -14,7 +14,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import ReactMarkdown from 'react-markdown'
 
 export default function ChatInterface() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, stop } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error, stop } = useChat({
     api: "/api/chat",
     streamProtocol: 'data',
     onError: (error) => {
@@ -70,7 +70,7 @@ export default function ChatInterface() {
   }
 
   return (
-    <Card className="flex flex-col h-[70vh] md:h-[600px] w-full overflow-hidden border shadow-lg">
+    <Card className="flex flex-col h-[85vh] md:h-[85vh] lg:h-[90vh] w-full max-w-[95vw] mx-auto overflow-hidden border shadow-lg">
       <div className="flex items-center justify-between p-4 border-b">
         <h2 className="text-xl font-semibold">Chat with Imam</h2>
         {messages.length > 0 && (
@@ -87,7 +87,7 @@ export default function ChatInterface() {
             <div className="flex flex-col items-center justify-center h-full text-center p-8">
               <h3 className="text-lg font-medium">Welcome to Hidayah</h3>
               <p className="text-sm text-muted-foreground mt-2 max-w-md">
-                Ask any questions about Islamic education and guidance. I'm here to help clarify your doubts regarding
+                Ask any questions about Islamic education and guidance. I&apos;m here to help clarify your doubts regarding
                 Deen and Duniya.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-6 w-full max-w-md">
@@ -102,7 +102,7 @@ export default function ChatInterface() {
                     variant="outline"
                     className="text-sm justify-start h-auto py-2 px-3"
                     onClick={() => {
-                      handleInputChange({ target: { value: suggestion } } as any)
+                      handleInputChange({ target: { value: suggestion } } as React.ChangeEvent<HTMLInputElement>)
                       inputRef.current?.focus()
                     }}
                   >
@@ -154,9 +154,6 @@ export default function ChatInterface() {
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </form>
-        <p className="text-xs text-muted-foreground mt-2 text-center">
-          Powered by Google Gemini AI • Responses are AI-generated
-        </p>
       </div>
     </Card>
   )
