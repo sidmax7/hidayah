@@ -1,16 +1,32 @@
 "use client"
 
-import type React from "react"
+import type React from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
-import { useState, useRef, useEffect } from "react"
-import { useChat } from "@ai-sdk/react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Send, Loader2, RefreshCw, XCircle, Paperclip, Mic } from "lucide-react"
-import MessageList from "./message-list"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import ReactMarkdown from 'react-markdown'
-import { ThemeToggle } from "./theme-toggle"
+import {
+  Loader2,
+  Mic,
+  Paperclip,
+  RefreshCw,
+  Send,
+  XCircle,
+} from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+
+import {
+  Alert,
+  AlertDescription,
+} from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useChat } from '@ai-sdk/react';
+
+import MessageList from './message-list';
+import { ThemeToggle } from './theme-toggle';
 
 export default function ChatInterface() {
   const { messages, input, handleInputChange, handleSubmit, isLoading, error, stop } = useChat({
@@ -77,7 +93,34 @@ export default function ChatInterface() {
   const MarkdownMessage = ({ content }: { content: string }) => {
     return (
       <div className="prose prose-sm dark:prose-invert max-w-none">
-        <ReactMarkdown>{content}</ReactMarkdown>
+        <ReactMarkdown
+          components={{
+            h1: (props) => <h1 className="text-2xl font-bold mt-6 mb-4" {...props} />,
+            h2: (props) => <h2 className="text-xl font-bold mt-5 mb-3" {...props} />,
+            h3: (props) => <h3 className="text-lg font-bold mt-4 mb-2" {...props} />,
+            h4: (props) => <h4 className="text-base font-bold mt-3 mb-2" {...props} />,
+            p: (props) => <p className="mb-4" {...props} />,
+            ul: (props) => <ul className="list-disc pl-6 mb-4" {...props} />,
+            ol: (props) => <ol className="list-decimal pl-6 mb-4" {...props} />,
+            li: (props) => <li className="mb-1" {...props} />,
+            blockquote: (props) => <blockquote className="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic my-4" {...props} />,
+            hr: (props) => <hr className="my-6 border-gray-300 dark:border-gray-700" {...props} />,
+            a: (props) => <a className="text-blue-600 dark:text-blue-400 hover:underline" {...props} />,
+            strong: (props) => <strong className="font-bold" {...props} />,
+            em: (props) => <em className="italic" {...props} />,
+            code: (props) => {
+              const { className } = props;
+              const match = /language-(\w+)/.exec(className || '');
+              const isInline = !match && !className?.includes('code-block');
+              
+              return isInline 
+                ? <code className="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm" {...props} />
+                : <code className="block bg-gray-100 dark:bg-gray-800 p-3 rounded-md text-sm overflow-x-auto my-4" {...props} />;
+            }
+          }}
+        >
+          {content}
+        </ReactMarkdown>
       </div>
     )
   }

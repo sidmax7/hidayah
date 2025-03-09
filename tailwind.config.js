@@ -65,8 +65,69 @@ module.exports = {
           "accordion-down": "accordion-down 0.2s ease-out",
           "accordion-up": "accordion-up 0.2s ease-out",
         },
+        typography: {
+          DEFAULT: {
+            css: {
+              maxWidth: '100%',
+              color: 'var(--foreground)',
+              h1: {
+                color: 'var(--foreground)',
+                fontWeight: '700',
+              },
+              h2: {
+                color: 'var(--foreground)',
+                fontWeight: '600',
+              },
+              h3: {
+                color: 'var(--foreground)',
+                fontWeight: '600',
+              },
+              h4: {
+                color: 'var(--foreground)',
+                fontWeight: '600',
+              },
+              p: {
+                color: 'var(--foreground)',
+              },
+              a: {
+                color: 'var(--primary)',
+                '&:hover': {
+                  color: 'var(--primary)',
+                },
+              },
+              blockquote: {
+                color: 'var(--muted-foreground)',
+                borderLeftColor: 'var(--border)',
+              },
+              strong: {
+                color: 'var(--foreground)',
+                fontWeight: '600',
+              },
+              code: {
+                color: 'var(--foreground)',
+                backgroundColor: 'var(--muted)',
+                borderRadius: '0.25rem',
+                padding: '0.25rem',
+              },
+              pre: {
+                backgroundColor: 'var(--muted)',
+                borderRadius: '0.5rem',
+                padding: '1rem',
+              },
+              ul: {
+                color: 'var(--foreground)',
+              },
+              ol: {
+                color: 'var(--foreground)',
+              },
+              li: {
+                color: 'var(--foreground)',
+              },
+            },
+          },
+        },
       },
     },
-    plugins: [require("tailwindcss-animate")],
+    plugins: [require("tailwindcss-animate"), require('@tailwindcss/typography')],
   }
   

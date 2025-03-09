@@ -1,7 +1,14 @@
-import { Message } from "@ai-sdk/react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { cn } from "@/lib/utils"
-import { ChurchIcon as Mosque, User } from "lucide-react"
+import {
+  ChurchIcon as Mosque,
+  User,
+} from 'lucide-react';
+
+import {
+  Avatar,
+  AvatarFallback,
+} from '@/components/ui/avatar';
+import { cn } from '@/lib/utils';
+import { Message } from '@ai-sdk/react';
 
 interface MessageListProps {
   messages: Message[]
@@ -43,7 +50,7 @@ export default function MessageList({ messages, renderContent }: MessageListProp
                 "rounded-lg px-4 py-2 max-w-[85%] text-sm",
                 isUser 
                   ? "bg-primary bg-opacity-90 text-gray-500 dark:text-gray-300 rounded-tr-none" 
-                  : "bg-muted bg-opacity-80 backdrop-blur-sm rounded-tl-none",
+                  : "bg-muted bg-opacity-80 backdrop-blur-sm rounded-tl-none prose-container",
               )}
             >
               {renderContent ? renderContent(message.content) : message.content}
