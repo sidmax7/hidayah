@@ -41,8 +41,14 @@ export default function ChatInterface() {
   const inputRef = useRef<HTMLInputElement>(null)
   const [showWelcome, setShowWelcome] = useState(true)
   const [isMounted, setIsMounted] = useState(false);
+  const [isSafari, setIsSafari] = useState(false)
 
   // Scroll to bottom when messages change
+  useEffect(() => {
+    const isSafariBrowser = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+    setIsSafari(isSafariBrowser)
+  }, [])
+
   useEffect(() => {
     if (messagesEndRef.current && messages.length > 0) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
@@ -273,7 +279,7 @@ export default function ChatInterface() {
                 value={input}
                 onChange={handleInputChange}
                 placeholder="How can Hidayah help?"
-                className="flex-1 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 pl-12 pr-12 py-3"
+                className={`flex-1 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 pl-12 pr-12 py-3 ${isSafari ? "safari-fix" : ""}`}
                 disabled={isLoading}
                 autoFocus // Add autoFocus attribute
               />

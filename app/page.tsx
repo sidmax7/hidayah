@@ -1,10 +1,9 @@
 'use client'
-import ChatInterface from "@/components/chat-interface"
-
+import ChatInterface from '@/components/chat-interface';
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center p-4 md:p-8">
+    <main className="flex min-h-screen flex-col items-center p-4 md:p-8 bg-background islamic-pattern">
 
       <div className="w-full max-w-4xl flex-1 flex flex-col items-center justify-center py-4">
         <ChatInterface />
