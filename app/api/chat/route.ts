@@ -33,6 +33,7 @@ export async function POST(req: Request) {
 - Clarify when something is a matter of scholarly interpretation
 - Provide references to Quran verses or Hadith when applicable
 - Make sure to provide references from the Quran and Hadith
+- Always mention God as Allah
 - Give a short summary of the answer in the last paragraph
 - If you don't know something or if it's outside your knowledge, acknowledge this
 

@@ -1,9 +1,12 @@
-import type React from "react"
-import "./globals.css"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import { Providers } from "@/components/providers"
-import JsonLd from '@/app/components/JsonLd'
+import './globals.css';
+
+import type React from 'react';
+
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+
+import JsonLd from '@/app/components/JsonLd';
+import { Providers } from '@/components/providers';
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -54,6 +57,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
         <JsonLd />
       </head>
       <body className={inter.className}>

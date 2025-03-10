@@ -147,11 +147,13 @@ export default function ChatInterface() {
   return (
     <div className="flex flex-col min-h-screen w-full">
       {/* Navigation Bar */}
-      <nav className="sticky top-0 z-20 w-full border-b bg-background/80 backdrop-blur-sm">
+      <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm islamic-border">
         <div className="container flex h-16 items-center justify-between px-4 max-w-4xl mx-auto">
           <div className="flex items-center gap-2">
+            {/* Added favicon.png image */}
+            <img src="/favicon.png" alt="Logo" className="h-8 w-8" />
             <div className="flex flex-col">
-              <h1 className="text-xl font-bold">Hidayah</h1>
+              <h1 className="text-xl font-bold font-calligraphy text-primary">Hidayah</h1>
               <p className="text-xs text-muted-foreground">Islamic Guidance AI</p>
             </div>
           </div>
