@@ -1,3 +1,5 @@
+'use client'
+
 import {
   ChurchIcon as Mosque,
   User,

@@ -40,6 +40,7 @@ export default function ChatInterface() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [showWelcome, setShowWelcome] = useState(true)
+  const [isMounted, setIsMounted] = useState(false);
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -76,6 +77,10 @@ export default function ChatInterface() {
       setShowWelcome(false)
     }
   }, [messages])
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -152,12 +157,23 @@ export default function ChatInterface() {
                 size="sm" 
                 onClick={() => {
                   window.location.reload()
-                  // Focus will happen automatically on page reload
                 }} 
                 title="Start a new conversation"
               >
                 <RefreshCw className="h-4 w-4 mr-2" />
                 New Chat
+              </Button>
+            )}
+            {isMounted && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  window.location.href = '/donate';
+                }}
+                title="Support Hidayah"
+              >
+                Support Us
               </Button>
             )}
             <ThemeToggle />
