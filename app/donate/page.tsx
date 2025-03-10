@@ -4,6 +4,15 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import QRCode from 'react-qr-code';
 import { useState, useEffect } from 'react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Support Hidayah - Donate to Islamic Education",
+  description: "Support our mission to provide accessible Islamic education and guidance through your generous donations.",
+  alternates: {
+    canonical: "/donate",
+  },
+}
 
 export default function DonatePage() {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);

@@ -1,5 +1,14 @@
 'use client'
 import ChatInterface from "@/components/chat-interface"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Hidayah - Islamic Guidance Through AI",
+  description: "Access Islamic knowledge and guidance through our AI-powered chat system. Get answers to your questions about Islam, Quran, and Islamic principles.",
+  alternates: {
+    canonical: "/",
+  },
+}
 
 export default function Home() {
   return (
