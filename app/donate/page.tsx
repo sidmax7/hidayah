@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 export default function DonatePage() {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [isMounted, setIsMounted] = useState(false);
-  const upiId = '9686204007@jupiteraxis';
+  const upiId = '9686204007@kotak811';
   const payeeName = 'Mohammed-Raihaan-Hussain';
   
   // Handle mounting and redirects in separate effects
@@ -26,11 +26,11 @@ export default function DonatePage() {
     
     if (isMobile) {
       if (isAndroid) {
-        window.location.href = 'upi://pay?pa=9686204007@jupiteraxis&pn=Mohammed-Raihaan-Hussain&cu=INR&tn=Donation';
+        window.location.href = 'upi://pay?pa=9686204007@kotak811&pn=Mohammed-Raihaan-Hussain&cu=INR&tn=Donation';
       } else {
-        window.location.href = 'gpay://upi/pay?pa=9686204007@jupiteraxis&pn=Mohammed-Raihaan-Hussain&cu=INR&tn=Donation';
+        window.location.href = 'gpay://upi/pay?pa=9686204007@kotak811&pn=Mohammed-Raihaan-Hussain&cu=INR&tn=Donation';
         setTimeout(() => {
-          window.location.href = 'phonepe://pay?pa=9686204007@jupiteraxis&pn=Mohammed-Raihaan-Hussain&cu=INR&tn=Donation';
+          window.location.href = 'phonepe://pay?pa=9686204007@kotak811&pn=Mohammed-Raihaan-Hussain&cu=INR&tn=Donation';
         }, 1000);
       }
     }
