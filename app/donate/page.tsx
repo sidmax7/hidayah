@@ -13,43 +13,49 @@ import Link from 'next/link';
 import QRCode from 'react-qr-code';
 
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
 export default function DonatePage() {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null)
   const [isMounted, setIsMounted] = useState(false)
-  const upiId = "9686204007@kotak811"
-  const payeeName = "Mohammed-Raihaan-Hussain"
+  const upiId = "9608546099@ybl"
+  const payeeName = "Ibrahim"
 
-  // Handle mounting and redirects in separate effects
+  // Handle mounting
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  // Handle redirects in a separate effect that runs after mounting
-  useEffect(() => {
-    if (!isMounted) return
-
-    const userAgent = navigator.userAgent || navigator.vendor || ""
-    const isMobile = /android|iphone|ipad|ipod/i.test(userAgent)
-    const isAndroid = /android/i.test(userAgent)
-
-    if (isMobile) {
-      if (isAndroid) {
-        window.location.href = "upi://pay?pa=9686204007@kotak811&pn=Mohammed-Raihaan-Hussain&cu=INR&tn=Donation"
-      } else {
-        window.location.href = "gpay://upi/pay?pa=9686204007@kotak811&pn=Mohammed-Raihaan-Hussain&cu=INR&tn=Donation"
-        setTimeout(() => {
-          window.location.href = "phonepe://pay?pa=9686204007@kotak811&pn=Mohammed-Raihaan-Hussain&cu=INR&tn=Donation"
-        }, 1000)
-      }
-    }
-  }, [isMounted])
+  // Remove automatic redirect logic since we'll use buttons instead
 
   // Generate UPI URL for QR code
   const getUpiUrl = (amount: number | null) => {
     const baseUrl = `upi://pay?pa=${upiId}&pn=${payeeName}&cu=INR&tn=Donation`
     return amount ? `${baseUrl}&am=${amount}` : baseUrl
   }
+
+  // Handle opening payment apps based on device
+  const openPaymentApp = (app: 'gpay' | 'phonepe') => {
+    const amount = selectedAmount || '';
+    const userAgent = navigator.userAgent || navigator.vendor || "";
+    const isAndroid = /android/i.test(userAgent);
+    const isIOS = /iphone|ipad|ipod/i.test(userAgent);
+    
+    if (isAndroid) {
+      // Android uses a universal UPI URL
+      window.location.href = `upi://pay?pa=${upiId}&pn=${payeeName}&cu=INR&tn=Donation${amount ? `&am=${amount}` : ''}`;
+    } else if (isIOS) {
+      // iOS uses app-specific schemes
+      if (app === 'gpay') {
+        window.location.href = `gpay://upi/pay?pa=${upiId}&pn=${payeeName}&cu=INR&tn=Donation${amount ? `&am=${amount}` : ''}`;
+      } else if (app === 'phonepe') {
+        window.location.href = `phonepe://pay?pa=${upiId}&pn=${payeeName}&cu=INR&tn=Donation${amount ? `&am=${amount}` : ''}`;
+      }
+    } else {
+      // For desktop, show an alert that they should use the QR code
+      alert('Please scan the QR code with your UPI app to make a payment.');
+    }
+  };
 
   // Show loading state until client-side code runs
   if (!isMounted) {
@@ -130,7 +136,23 @@ export default function DonatePage() {
             </p>
 
             {selectedAmount && (
-              <p className="text-sm font-medium mb-4 text-primary">Selected amount: ₹{selectedAmount}</p>
+              <div className="flex flex-col items-center">
+                <p className="text-sm font-medium mb-4 text-primary">Selected amount: ₹{selectedAmount}</p>
+                
+                <div className="flex gap-4 mb-6">
+                    <Avatar
+                    onClick={() => openPaymentApp('gpay')}
+                    >
+                      <AvatarImage src="/assets/google-pay-icon.png" />
+                    </Avatar>
+                    <Avatar
+                    onClick={() => openPaymentApp('phonepe')}
+                    >
+                      <AvatarImage src="/assets/phonepe-icon.png" />
+                    </Avatar>
+                 
+                </div>
+              </div>
             )}
           </div>
 

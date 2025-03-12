@@ -9,7 +9,6 @@ import {
 
 import {
   Loader2,
-  Mic,
   Paperclip,
   RefreshCw,
   Send,
@@ -294,7 +293,7 @@ export default function ChatInterface() {
                 className="absolute right-12 h-8 w-8 rounded-full text-muted-foreground hover:text-foreground"
                 onClick={() => inputRef.current?.focus()} // Refocus input after clicking
               >
-                <Mic className="h-4 w-4" />
+                {/* <Mic className="h-4 w-4" /> */}
               </Button>
               
               {/* Send button */}
