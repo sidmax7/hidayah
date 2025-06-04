@@ -1,4 +1,13 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Islamic Education Chatbot
+
+An intelligent chatbot designed to provide Islamic education and guidance. This project is built with [Next.js](https://nextjs.org) and aims to help users learn about Islamic teachings, principles, and practices through interactive conversations.
+
+## Features
+
+- Interactive chat interface for Islamic education
+- Answers questions about Islamic teachings and practices
+- User-friendly design with modern UI
+- Built with Next.js for optimal performance
 
 ## Getting Started
 
@@ -20,14 +29,26 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Project Structure
+
+- `app/` - Main application directory containing pages and components
+- `components/` - Reusable UI components
+- `lib/` - Utility functions and configurations
+- `public/` - Static assets
+
+## Technologies Used
+
+- **Next.js** - React framework for production
+- **React** - Frontend library
+- **TypeScript** - Type-safe JavaScript
+- **Tailwind CSS** - Utility-first CSS framework
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
 ## Deploy on Vercel
 
