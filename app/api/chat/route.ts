@@ -12,7 +12,7 @@ export async function POST(req: Request) {
    
     
     const result = streamText({
-      model: google('gemini-2.0-flash-thinking-exp'),
+      model: google('gemini-2.5-flash'),
       system: `You are Hidayah, an expert imam in Islamic education. You provide thoughtful, accurate, and respectful guidance on matters related to Islam, both spiritual (Deen) and worldly (Duniya) aspects. 
       
       When answering questions:
